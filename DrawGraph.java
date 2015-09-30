@@ -135,6 +135,39 @@ public class DrawGraph
 		}
 	}
 
+	class BasicFn
+	{
+		//fnExp will be override by sonclass
+		public double fnExp(double x){return Double.NaN;}
+		//300*300 px array of the function's graph
+		public boolean[][] graphFnArray = new boolean[300][300];
+		//pxToPoint can convert a px to a point(-10<=x<=10,-10<=y<=10) ,and point_x=point[0] ,point_y=point[1]
+		public double[] pxToPoint(int x,int y)
+		{
+			double[] point = new double[2];
+			point[0] = (x/15)-10;
+			point[1] = (y/15)+10;
+			return point;
+		}
+		//isPointOnFn check if a point on the function
+		public boolean isPointOnFn(double x,double y)
+		{
+			//sqrt(2*(1/15)^2)=0.094280904158206 ,use 0.095 to check if a point on the graph
+			return (Math.abs(fnExp(x)-y)<=0.095);
+		}
+		//make a 300*300 px array for graph and storage in graphFnArray[300][300]
+		public void mkGraphArray()
+		{
+			for(int x=0;x<300;x++)
+				for(int y=0;y<300;y++)
+				{
+					if(isPointOnFn(pxToPoint(x,y)[0],pxToPoint(x,y)[1]))
+						graphFnArray[x][y]=true;
+					else graphFnArray[x][y]=false;	
+				}
+		}
+	}
+
 	public static void main(String[] args)
 	{
 		new DrawGraph().init();
