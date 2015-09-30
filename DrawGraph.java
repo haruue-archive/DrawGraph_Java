@@ -178,6 +178,143 @@ public class DrawGraph
 		}
 	}
 
+	class QuadraticFn extends BasicFn
+	{
+		private double a,b,c;
+		public double fnExp(double x)
+		{
+			return a*x*x+b*x+c;  //ax^2+bx+c
+		}
+		public QuadraticFn(double a,double b,double c)
+		{
+			this.a=a;
+			this.b=b;
+			this.c=c;
+			mkGraphArray();
+		}
+	}
+
+	class CubicFn extends BasicFn
+	{
+		private double a,b,c,d;
+		public double fnExp(double x)
+		{
+			return a*x*x*x+b*x*x+c*x+d;  //ax^3+bx^2+cx+d
+		}
+		public CubicFn(double a,double b,double c,double d)
+		{
+			this.a=a;
+			this.b=b;
+			this.c=c;
+			this.d=d;
+			mkGraphArray();
+		}
+	}
+
+	class FourPowerFn extends BasicFn
+	{
+		private double a,b,c,d,e;
+		public double fnExp(double x)
+		{
+			return a*x*x*x*x+b*x*x*x+c*x*x+d*x+e;  //ax^4+bx^3+cx^2+dx+e
+		}
+		public FourPowerFn(double a,double b,double c,double d,double e)
+		{
+			this.a=a;
+			this.b=b;
+			this.c=c;
+			this.d=d;
+			this.e=e;
+			mkGraphArray();
+		}
+	}
+
+	class ExpFn extends BasicFn
+	{
+		private double a,b;
+		public double fnExp(double x)
+		{
+			return Math.pow(a,x)+b;  //a^x+b
+		}
+		public ExpFn(double a,double b)
+		{
+			this.a=a;
+			this.b=b;
+			mkGraphArray();
+		}
+	}
+
+	class LogFn extends BasicFn
+	{
+		private double a,b;
+		public double fnExp(double x)
+		{
+			return Math.log(x)/Math.log(a)+b;  //log(a,x)+b = ln(x)/ln(a)+b
+		}
+		public LogFn(double a,double b)
+		{
+			this.a=a;
+			this.b=b;
+			mkGraphArray();
+		}
+	}
+
+	class Ellipse extends BasicFn
+	{
+		private double a,b,l,h;
+		//ellipse is a kind of implicit function ,so override the isPointOnFn() instead 
+		public boolean isPointOnFn(double x,double y)
+		{
+			return (Math.abs((((x-l)*(x-l))/(a*a)+((y-h)*(y-h))/(b*b))-1)<=0.0943);  //(x-l)^2/a^2+(y-h)^2/b^2=1
+		}
+		public Ellipse(double a,double b,double l,double h)
+		{
+			this.a=a;
+			this.b=b;
+			this.l=l;
+			this.h=h;
+			mkGraphArray();
+		}
+	}
+
+	class Triangle extends BasicFn
+	{
+		private double a,b,c,d,e,f;
+
+		//use two point to make a function expression
+		public double fnExp(double x,double x1,double y1,double x2,double y2)
+		{
+			return((y1/(x1-x2)-y2/(x1-x2))*x+((x1*y2)/(x1-x2)+(x2*y1)/(x2-x1)));
+		}
+		//override isPointOnFn to adapt the change of fnExp
+		public boolean isPointOnFn(double x,double y)
+		{
+			//sqrt(2*(1/15)^2)==0.094280904158206
+			return (Math.abs(fnExp(x,a,b,c,d)-y)<=0.0943||Math.abs(fnExp(x,a,b,e,f)-y)<=0.0943||Math.abs(fnExp(x,c,d,e,f)-y)<=0.0943);
+		}
+		//remove no use lines ,draw a rect out of triangle and remove all out of the rect
+		public void rmNoUseLine()
+		{
+			double x1=Math.min(a,Math.min(c,e)) ,y1=Math.min(b,Math.min(d,f)) ,x2=Math.max(a,Math.max(c,e)) ,y2=Math.max(b,Math.max(d,f));
+			for(int x=0;x<300;x++)
+				for(int y=0;y<300;y++)
+					if(pxToPoint(x,y)[0]<x1||pxToPoint(x,y)[1]<y1||pxToPoint(x,y)[0]>x2||pxToPoint(x,y)[1]>y2)
+						graphFnArray[x][y]=false;
+		}
+
+		public Triangle(double a,double b,double c,double d,double e,double f)
+		{
+			this.a=a;
+			this.b=b;
+			this.c=c;
+			this.d=d;
+			this.e=e;
+			this.f=f;
+			mkGraphArray();
+			rmNoUseLine();
+		}
+	}
+
 	public static void main(String[] args)
 	{
 		new DrawGraph().init();
