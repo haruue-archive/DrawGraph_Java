@@ -124,7 +124,6 @@ public class DrawGraph
 				for(int y=0;y<300;y++)
 				{
 					if(x==150||y==150) pxArray[x][y]=true;
-					else pxArray[x][y]=false;
 				}
 			//draw function graph
 			g.setColor(new Color(0,0,0));
@@ -145,26 +144,37 @@ public class DrawGraph
 		public double[] pxToPoint(int x,int y)
 		{
 			double[] point = new double[2];
-			point[0] = (x/15)-10;
-			point[1] = (y/15)+10;
+			point[0] = ((double)x/15)-10;
+			point[1] = 10-((double)y/15);
 			return point;
 		}
 		//isPointOnFn check if a point on the function
 		public boolean isPointOnFn(double x,double y)
 		{
-			//sqrt(2*(1/15)^2)=0.094280904158206 ,use 0.095 to check if a point on the graph
-			return (Math.abs(fnExp(x)-y)<=0.095);
+			//sqrt(2*(1/15)^2)==0.094280904158206
+			return (Math.abs(fnExp(x)-y)<=0.0943);
 		}
 		//make a 300*300 px array for graph and storage in graphFnArray[300][300]
 		public void mkGraphArray()
 		{
 			for(int x=0;x<300;x++)
 				for(int y=0;y<300;y++)
-				{
-					if(isPointOnFn(pxToPoint(x,y)[0],pxToPoint(x,y)[1]))
-						graphFnArray[x][y]=true;
-					else graphFnArray[x][y]=false;	
-				}
+					graphFnArray[x][y]=isPointOnFn(pxToPoint(x,y)[0],pxToPoint(x,y)[1]);
+		}
+	}
+
+	class LinearFn extends BasicFn
+	{
+		private double a,b;
+		public double fnExp(double x)
+		{
+			return a*x+b;
+		}
+		public LinearFn(double a,double b)
+		{
+			this.a=a;
+			this.b=b;
+			mkGraphArray();
 		}
 	}
 
