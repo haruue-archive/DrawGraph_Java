@@ -10,6 +10,10 @@ public class DrawGraph
 
 	public void init()
 	{
+		//define Canvas
+		DrawCanvas drawArea = new DrawCanvas();
+		drawArea.repaint();
+		drawArea.setPreferredSize(new Dimension(300,300));
 
 
 		//define item in fnChooser
@@ -33,9 +37,11 @@ public class DrawGraph
 		lbBox.add(new Label("c=",Label.RIGHT));
 		lbBox.add(new Label("d=",Label.RIGHT));
 		lbBox.add(new Label("e=",Label.RIGHT));
+		lbBox.add(new Label("f=",Label.RIGHT));
 		lbBox.add(new Label("l=",Label.RIGHT));
 		lbBox.add(new Label("h=",Label.RIGHT));
 		Box inputBox = Box.createVerticalBox();
+		inputBox.add(new TextField(5));
 		inputBox.add(new TextField(5));
 		inputBox.add(new TextField(5));
 		inputBox.add(new TextField(5));
@@ -55,11 +61,49 @@ public class DrawGraph
 
 		//design main window
 		Box mainBox = Box.createVerticalBox();
+		mainBox.add(drawArea);
 		mainBox.add(fnPanel);
 		mainBox.add(prmtBox);
 		mainWindow.add(mainBox);
 		mainWindow.pack();
 		mainWindow.setVisible(true);
+
+		//window exit button
+		mainWindow.addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				System.exit(0);
+			}
+		});
+	}
+
+
+	class DrawCanvas extends Canvas
+	{
+		boolean[][] pxArray= new boolean[300][300];
+		public void paint(Graphics g)
+		{
+
+			for(int x=0;x<300;x++)
+				for(int y=0;y<300;y++)
+				{
+					if(x==150||y==150) pxArray[x][y]=true;
+					else pxArray[x][y]=false;
+				}
+
+			for(int x=0;x<300;x++)
+				for(int y=0;y<300;y++)
+				{
+					if(x==y) pxArray[x][y]=true;
+				}
+
+			g.setColor(new Color(0,0,0));
+			for(int x=0;x<300;x++)
+				for(int y=0;y<300;y++)
+					if(pxArray[x][y])
+						g.fillOval(x,y,1,1);
+		}
 	}
 
 	public static void main(String[] args)
