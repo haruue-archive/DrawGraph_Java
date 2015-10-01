@@ -37,6 +37,8 @@ public class DrawGraph
 		buttonBox.add(clearButton);
 		buttonBox.add(Box.createVerticalGlue());
 
+
+
 		//define parameter input area
 		Box lbBox = Box.createVerticalBox();
 		lbBox.add(new Label("a=",Label.RIGHT));
@@ -48,18 +50,64 @@ public class DrawGraph
 		lbBox.add(new Label("l=",Label.RIGHT));
 		lbBox.add(new Label("h=",Label.RIGHT));
 		Box inputBox = Box.createVerticalBox();
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
-		inputBox.add(new TextField(5));
+		TextField inputArg_a = new TextField("0",5); 
+		TextField inputArg_b = new TextField("0",5); 
+		TextField inputArg_c = new TextField("0",5); 
+		TextField inputArg_d = new TextField("0",5); 
+		TextField inputArg_e = new TextField("0",5); 
+		TextField inputArg_f = new TextField("0",5); 
+		TextField inputArg_l = new TextField("0",5); 
+		TextField inputArg_h = new TextField("0",5); 
+		inputBox.add(inputArg_a);
+		inputBox.add(inputArg_b);
+		inputBox.add(inputArg_c);
+		inputBox.add(inputArg_d);
+		inputBox.add(inputArg_e);
+		inputBox.add(inputArg_f);
+		inputBox.add(inputArg_l);
+		inputBox.add(inputArg_h);
 		Box prmtBox = Box.createHorizontalBox();
 		prmtBox.add(lbBox);
 		prmtBox.add(inputBox);
 		prmtBox.add(buttonBox);
+
+		//define buttons listeners
+		drawButton.addActionListener(e ->
+		{
+			switch (fnChooser.getItem(fnChooser.getSelectedIndex()))
+			{
+				case "ax+b":
+					drawArea.addPoint(new LinearFn(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim())).graphFnArray);
+					break;
+				case "ax^2+bx+c":
+					drawArea.addPoint(new QuadraticFn(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim()),Double.parseDouble(inputArg_c.getText().trim())).graphFnArray);
+					break;
+				case "ax^3+bx^2+cx+d":
+					drawArea.addPoint(new CubicFn(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim()),Double.parseDouble(inputArg_c.getText().trim()),Double.parseDouble(inputArg_d.getText().trim())).graphFnArray);
+					break;
+				case "ax^4+bx^3+cx^2+dx+e":
+					drawArea.addPoint(new FourPowerFn(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim()),Double.parseDouble(inputArg_c.getText().trim()),Double.parseDouble(inputArg_d.getText().trim()),Double.parseDouble(inputArg_e.getText().trim())).graphFnArray);
+					break;
+				case "a^x+b":
+					drawArea.addPoint(new ExpFn(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim())).graphFnArray);
+					break;
+				case "log(a,x)+b":
+					drawArea.addPoint(new LogFn(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim())).graphFnArray);
+					break;
+				case "(x-l)^2/a^2+(y-h)^2/b^2=1":
+					drawArea.addPoint(new Ellipse(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim()),Double.parseDouble(inputArg_l.getText().trim()),Double.parseDouble(inputArg_h.getText().trim())).graphFnArray);
+					break;
+				case "triangle(a,b,c,d,e,f)":
+					drawArea.addPoint(new Triangle(Double.parseDouble(inputArg_a.getText().trim()),Double.parseDouble(inputArg_b.getText().trim()),Double.parseDouble(inputArg_c.getText().trim()),Double.parseDouble(inputArg_d.getText().trim()),Double.parseDouble(inputArg_e.getText().trim()),Double.parseDouble(inputArg_f.getText().trim())).graphFnArray);
+					break;
+			}
+			drawArea.repaint();
+		});
+		clearButton.addActionListener(e ->
+		{
+			drawArea.clearCanvas();
+			drawArea.repaint();
+		});
 
 		//design main window
 		Box mainBox = Box.createVerticalBox();
@@ -152,7 +200,7 @@ public class DrawGraph
 		public boolean isPointOnFn(double x,double y)
 		{
 			//sqrt(2*(1/15)^2)==0.094280904158206
-			return (Math.abs(fnExp(x)-y)<=0.0943);
+			return (Math.abs(fnExp(x)-y)<=0.095);
 		}
 		//make a 300*300 px array for graph and storage in graphFnArray[300][300]
 		public void mkGraphArray()
@@ -265,7 +313,7 @@ public class DrawGraph
 		//ellipse is a kind of implicit function ,so override the isPointOnFn() instead 
 		public boolean isPointOnFn(double x,double y)
 		{
-			return (Math.abs((((x-l)*(x-l))/(a*a)+((y-h)*(y-h))/(b*b))-1)<=0.0943);  //(x-l)^2/a^2+(y-h)^2/b^2=1
+			return (Math.abs((((x-l)*(x-l))/(a*a)+((y-h)*(y-h))/(b*b))-1)<=0.090);  //(x-l)^2/a^2+(y-h)^2/b^2=1
 		}
 		public Ellipse(double a,double b,double l,double h)
 		{
@@ -290,7 +338,7 @@ public class DrawGraph
 		public boolean isPointOnFn(double x,double y)
 		{
 			//sqrt(2*(1/15)^2)==0.094280904158206
-			return (Math.abs(fnExp(x,a,b,c,d)-y)<=0.0943||Math.abs(fnExp(x,a,b,e,f)-y)<=0.0943||Math.abs(fnExp(x,c,d,e,f)-y)<=0.0943);
+			return (Math.abs(fnExp(x,a,b,c,d)-y)<=0.095||Math.abs(fnExp(x,a,b,e,f)-y)<=0.095||Math.abs(fnExp(x,c,d,e,f)-y)<=0.095);
 		}
 		//remove no use lines ,draw a rect out of triangle and remove all out of the rect
 		public void rmNoUseLine()
