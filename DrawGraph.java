@@ -1,3 +1,12 @@
+// * * * * * * * * * * * * * * * * * * * * * * * * 
+// * REDROCK-TEAM HOMEWORK 1 (20150920)          *
+// * Level 4 - Function Graphics Drawer          *
+// * Author:  Haruue Icymoon                     *
+// * Time:    Thu Oct 1 13:07:58 CST 2015        *
+// * Website: http://www.caoyue.com.cn/          * 
+// * * * * * * * * * * * * * * * * * * * * * * * *
+
+
 //import awt
 import java.awt.*;
 import java.awt.event.*;
