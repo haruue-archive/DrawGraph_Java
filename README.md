@@ -15,6 +15,7 @@ DrawGraph
 ##Known BUG
 由于判断的问题，绘制斜率接近0的部分时，图线会变粗，绘制斜率较大的部分时，图线会变细或者变成点（椭圆与之相反，因为椭圆的判断函数 ifOnFn() 不一样）。<br />
 ~~反正比你们在 国庆作业.pdf 中给的示例更好就行~~<br />
+绘制钝角三角形时会出现多余线段。<br />
 发现新的BUG？您可以提交[issue](https://github.com/haruue/DrawGraph_Java/issues)，我们感激不尽！
 
 ##Troubleshooting
